@@ -1,0 +1,138 @@
+<html>
+<title>Canvas based game coding</title>
+<script type="application/javascript">
+    /*!
+     * swiped-events.js - v1.1.4
+     * Pure JavaScript swipe events
+     * https://github.com/john-doherty/swiped-events
+     * @inspiration https://stackoverflow.com/questions/16348031/disable-scrolling-when-touch-moving-certain-element
+     * @forked https://github.com/vishwarajanand/swiped-events/blob/master/dist/swiped-events.min.js
+     * @author John Doherty <www.johndoherty.info>
+     * @license MIT
+     */
+    !function (t, e) { "use strict"; "function" != typeof t.CustomEvent && (t.CustomEvent = function (t, n) { n = n || { bubbles: !1, cancelable: !1, detail: void 0 }; var a = e.createEvent("CustomEvent"); return a.initCustomEvent(t, n.bubbles, n.cancelable, n.detail), a }, t.CustomEvent.prototype = t.Event.prototype), e.addEventListener("touchstart", function (t) { if ("true" === t.target.getAttribute("data-swipe-ignore")) return; s = t.target, r = Date.now(), n = t.touches[0].clientX, a = t.touches[0].clientY, u = 0, i = 0 }, !1), e.addEventListener("touchmove", function (t) { if (!n || !a) return; var e = t.touches[0].clientX, r = t.touches[0].clientY; u = n - e, i = a - r }, !1), e.addEventListener("touchend", function (t) { if (s !== t.target) return; var e = parseInt(l(s, "data-swipe-threshold", "20"), 10), o = parseInt(l(s, "data-swipe-timeout", "500"), 10), c = Date.now() - r, d = "", p = t.changedTouches || t.touches || []; Math.abs(u) > Math.abs(i) ? Math.abs(u) > e && c < o && (d = u > 0 ? "swiped-left" : "swiped-right") : Math.abs(i) > e && c < o && (d = i > 0 ? "swiped-up" : "swiped-down"); if ("" !== d) { var b = { dir: d.replace(/swiped-/, ""), xStart: parseInt(n, 10), xEnd: parseInt((p[0] || {}).clientX || -1, 10), yStart: parseInt(a, 10), yEnd: parseInt((p[0] || {}).clientY || -1, 10) }; s.dispatchEvent(new CustomEvent("swiped", { bubbles: !0, cancelable: !0, detail: b })), s.dispatchEvent(new CustomEvent(d, { bubbles: !0, cancelable: !0, detail: b })) } n = null, a = null, r = null }, !1); var n = null, a = null, u = null, i = null, r = null, s = null; function l(t, n, a) { for (; t && t !== e.documentElement;) { var u = t.getAttribute(n); if (u) return u; t = t.parentNode } return a } }(window, document);
+</script>
+
+<body>
+    <div data-swipe-threshold="20" data-swipe-timeout="500" data-swipe-ignore="false">
+        <div id="score">Swipe to start the game and eat as much as you want!</div>
+        <canvas id="gc" width="400" height="400"></canvas>
+        <script>
+            window.onload = function () {
+                canv = document.getElementById("gc");
+                ctx = canv.getContext("2d");
+                document.addEventListener("keydown", keyPush);
+                document.addEventListener('swiped', swipe);
+                // controls the frame rate of the game !!
+                setInterval(game, 1000 / 15);
+            }
+            px = py = 10;
+            gs = tc = 20;
+            ax = ay = 15;
+            xv = yv = 0;
+            trail = [];
+            tail = 5;
+            score = 0;
+            function game() {
+                px += xv;
+                py += yv;
+                if (px < 0) {
+                    px = tc - 1;
+                }
+                if (px > tc - 1) {
+                    px = 0;
+                }
+                if (py < 0) {
+                    py = tc - 1;
+                }
+                if (py > tc - 1) {
+                    py = 0;
+                }
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canv.width, canv.height);
+
+                ctx.fillStyle = "lime";
+                for (var i = 0; i < trail.length; i++) {
+                    ctx.fillRect(trail[i].x * gs, trail[i].y * gs, gs - 2, gs - 2);
+                    if (trail[i].x == px && trail[i].y == py) {
+                        tail = 5;
+                    }
+                }
+                trail.push({ x: px, y: py });
+                while (trail.length > tail) {
+                    trail.shift();
+                }
+
+                if (ax == px && ay == py) {
+                    tail++;
+                    ax = Math.floor(Math.random() * tc);
+                    ay = Math.floor(Math.random() * tc);
+                    //scoring
+                    score++;
+                    document.getElementById("score").innerText = "Score: " + score;
+                }
+                ctx.fillStyle = "red";
+                ctx.fillRect(ax * gs, ay * gs, gs - 2, gs - 2);
+            }
+            function keyPush(evt) {
+                switch (evt.keyCode) {
+                    case 37:
+                        xv = -1; yv = 0;
+                        break;
+                    case 38:
+                        xv = 0; yv = -1;
+                        break;
+                    case 39:
+                        xv = 1; yv = 0;
+                        break;
+                    case 40:
+                        xv = 0; yv = 1;
+                        break;
+                }
+            }
+            function swipe(e) {
+                if (!(e && e.detail && e.detail.dir)) {
+                    console.log("No good direction detected in the swipe callback.");
+                    return;
+                }
+                switch (e.detail.dir) {
+                    case "left":
+                        xv = -1; yv = 0;
+                        break;
+                    case "up":
+                        xv = 0; yv = -1;
+                        break;
+                    case "right":
+                        xv = 1; yv = 0;
+                        break;
+                    case "down":
+                        xv = 0; yv = 1;
+                        break;
+                    default:
+                        console.log("Invalid swipe: " + e.detail.dir);
+                }
+            }
+        </script>
+    </div>
+    <div id="notes">
+        <br>
+        <b>Notes: </b>
+        <br>
+        1. Website source on GitHub here:
+        <a href="https://github.com/vishwarajanand/JsSnakeGame">
+            https://github.com/vishwarajanand/JsSnakeGame
+        </a>
+        <br>
+        2. Website hosted on GitHub here:
+        <a href="https://vishwarajanand.github.io/JsSnakeGame">
+            https://vishwarajanand.github.io/JsSnakeGame
+        </a>
+        <br>
+        3. Inspired (read shamelessly copied from) Chris DeLeon's paste:
+        <a href="https://pastebin.com/Z3zhb7cY">
+            https://pastebin.com/Z3zhb7cY
+        </a>
+    </div>
+</body>
+
+</html>

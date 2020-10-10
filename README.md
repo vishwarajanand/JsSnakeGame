@@ -4,7 +4,7 @@ Shamelessly copied a remarkably simple snake game coded using just a canvas tag!
 # Preview
 
 ![Preview](https://github.com/vishwarajanand/JsSnakeGame/blob/main/demos/game_start.png?raw=true "Game Start")
-![Preview](https://github.com/vishwarajanand/JsSnakeGame/blob/main/demos/game_play_.png?raw=true "Game Play")
+![Preview](https://github.com/vishwarajanand/JsSnakeGame/blob/main/demos/game_play.png?raw=true "Game Play")
 
 # Demo
 Hosted on Github Pages:

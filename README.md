@@ -5,7 +5,7 @@ I have added a swipe functionality so that users can enjoy the game even on a mo
 
 # Blog
 
-Blog is published at: https://vishwarajanand.com/business/released-simple-js-snake-game/
+Blog is published at: https://vishwarajanand.com/tech/released-simple-js-snake-game/
 
 # Preview
 

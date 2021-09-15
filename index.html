@@ -73,16 +73,24 @@
             }
             function keyPush(evt) {
                 switch (evt.keyCode) {
-                    case 37:
+                    case 97: // a
+                    case 65: // A
+                    case 37: // left arrow
                         xv = -1; yv = 0;
                         break;
-                    case 38:
+                    case 115: // s
+                    case 83: // S
+                    case 38: // down arrow
                         xv = 0; yv = -1;
                         break;
-                    case 39:
+                    case 100: // d
+                    case 68: // D
+                    case 39: // right arrow
                         xv = 1; yv = 0;
                         break;
-                    case 40:
+                    case 119: // w
+                    case 87: // W
+                    case 40: // up arrow
                         xv = 0; yv = 1;
                         break;
                 }

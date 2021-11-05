@@ -24,6 +24,10 @@ body {
         <script>
             window.onload = function () {
                 canv = document.getElementById("gc");
+                // auto resize to max width and square size
+                ctx.canvas.width  = window.innerWidth;
+                ctx.canvas.height  = window.innerWidth;
+
                 ctx = canv.getContext("2d");
                 document.addEventListener("keydown", keyPush);
                 document.addEventListener('swiped', swipe);

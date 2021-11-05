@@ -22,24 +22,37 @@ body {
         <div id="score">Swipe to start the game and eat as much as you want!</div>
         <canvas id="gc" width="400" height="400"></canvas>
         <script>
+            canv = document.getElementById("gc");
+            // auto resize to max width and square size
+            canv.width  = Math.min(window.innerWidth, 600);
+            canv.height  = Math.min(window.innerWidth, 600);
             window.onload = function () {
-                canv = document.getElementById("gc");
-                // auto resize to max width and square size
-                ctx.canvas.width  = window.innerWidth;
-                ctx.canvas.height  = window.innerWidth;
-
                 ctx = canv.getContext("2d");
                 document.addEventListener("keydown", keyPush);
                 document.addEventListener('swiped', swipe);
                 // controls the frame rate of the game !!
                 setInterval(game, 1000 / 15);
             }
+
+            // snake head location
             px = py = 10;
-            gs = tc = 20;
-            ax = ay = 15;
+            // snake velocity
             xv = yv = 0;
-            trail = [];
+            // apple location
+            ax = ay = 15;
+            // snake body
             tail = 5;
+            trail = [];
+            // tile size
+            gs = 40;
+            gs = canv.width/20;
+            // board size
+            tc = 40;
+            // console.log("tc : " + tc);
+            // console.log("gs : " + gs);
+            // console.log("canv.width : " + canv.width);
+            // console.log("canv.width/gs : " + (canv.width/gs));
+            tc = canv.width/gs;
             score = 0;
             function game() {
                 px += xv;
@@ -73,8 +86,8 @@ body {
 
                 if (ax == px && ay == py) {
                     tail++;
-                    ax = Math.floor(Math.random() * tc);
-                    ay = Math.floor(Math.random() * tc);
+                    ax = 1 + Math.floor(Math.random() * (tc-1));
+                    ay = 1 + Math.floor(Math.random() * (tc-1));
                     //scoring
                     score++;
                     document.getElementById("score").innerText = "Score: " + score;
